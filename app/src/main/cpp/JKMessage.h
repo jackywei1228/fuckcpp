@@ -7,12 +7,12 @@
 
 class JKMessageListener {
 public:
-    virtual int onRecive(unsigned char bytes[]) = 0;
+    virtual int onRecive(int type,unsigned char bytes[],int len) = 0;
 };
 
 class JKMessage {
 public:
-    int addMessage(int type,unsigned char bytes[]);
+    int addMessage(int type,unsigned char bytes[],int len);
     int addJKMessageListener(int type,JKMessageListener messageListener);
 };
 

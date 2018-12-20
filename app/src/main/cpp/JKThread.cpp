@@ -87,7 +87,7 @@ void JKThread::start() {
 //    t->entryFunction = (android_thread_func_t)_threadLoop;
 //    t->userData = NULL;
 //    entryFunction = (android_thread_func_t)&thread_data_t::trampoline;
-////    userData = t;
+//    userData = t;
 //    pthread_create(&mThread, &attr, (android_pthread_entry)entryFunction, NULL);
     pthread_create(&mThread, &attr, (android_pthread_entry)_threadLoop,(void*)this);
 }
@@ -98,3 +98,4 @@ int JKThread::_threadLoop(void* user){
     myInstane->run();
     myInstane->mRunning = false;
 }
+
