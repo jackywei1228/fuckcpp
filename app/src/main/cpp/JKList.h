@@ -6,11 +6,11 @@
 #define FUCKCPP_JKLIST_H
 
 struct listnode;
-typedef  struct __listnode {
+struct listnode {
     listnode* pPre;
     listnode* pNext;
     void* item;
-} listnode;
+};
 
 class JKList {
 public:
