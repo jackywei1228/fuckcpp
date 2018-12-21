@@ -15,13 +15,13 @@ class JKMessageManager {
 public:
     int addMessage(int type,unsigned char bytes[],int len);
     int addJKMessageListener(int type,JKMessageListener messageListener);
-    JKMessageManager* GetInstance();
+    static JKMessageManager* GetInstance();
 
 private:
     JKMessageManager();
     void broadcast();
     JKList mJKList;
-    JKMessageManager* mJKMessageManager;
+    static JKMessageManager* mJKMessageManager;
 };
 
 

@@ -10,6 +10,8 @@ typedef struct __itemData {
   unsigned char *bytes;
 } itemData;
 
+JKMessageManager* JKMessageManager::mJKMessageManager = NULL;
+
 int JKMessageManager::addMessage(int type, unsigned char *bytes, int len) {
     itemData* pitemdata = new itemData();
     pitemdata->bytes = bytes;
