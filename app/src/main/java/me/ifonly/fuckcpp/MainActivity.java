@@ -26,4 +26,8 @@ public class MainActivity extends Activity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+    public void callByNative(String content){
+        TextView tv = (TextView) findViewById(R.id.sample_text);
+        tv.setText(content);
+    }
 }

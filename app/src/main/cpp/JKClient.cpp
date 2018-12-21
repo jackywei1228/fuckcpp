@@ -17,6 +17,8 @@
 
 #define MAXDATASIZE 4096
 
+extern JNIEnv *myenv;
+
 JKClient::JKClient(std::string ipName): mIpName(ipName) {
 
 }
@@ -37,6 +39,8 @@ void *get_in_addr(struct sockaddr *sa)
 
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
+
+
 
 void JKClient::run() {
     int sockfd, numbytes;

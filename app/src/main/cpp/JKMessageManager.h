@@ -7,6 +7,8 @@
 
 #include "JKList.h"
 
+
+
 class JKMessageManager {
     class JKMessageListener {
     public:
