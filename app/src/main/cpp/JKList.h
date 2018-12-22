@@ -14,10 +14,18 @@ struct listnode {
 
 class JKList {
 public:
+    class Iterator{
+    public:
+        Iterator(listnode* current);
+        void* next();
+    private:
+        listnode* mCurrent;
+    };
     JKList();
     int push(void* item);
     void* pop();
-
+    Iterator* getIterator();
+    bool isEmpty();
 private:
     listnode* mPlistnodeHead;
     listnode* mPlistnodeTail;

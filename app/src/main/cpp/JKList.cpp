@@ -24,8 +24,10 @@ int JKList::push(void *item) {
     } else {
         mPlistnodeTail->pNext = new listnode();
         mPlistnodeTail->pNext->pPre = mPlistnodeTail;
+        //new tail
         mPlistnodeTail = mPlistnodeTail->pNext;
         mPlistnodeTail->item = item;
+        mPlistnodeTail->pNext = NULL;
     }
     return 0;
 }
@@ -33,11 +35,44 @@ int JKList::push(void *item) {
 void *JKList::pop() {
     if(mPlistnodeHead == NULL || mPlistnodeTail == NULL){
         return NULL;
-    } else {
-        listnode* tmp = mPlistnodeTail;
-        void *item = tmp->item;
-        mPlistnodeTail = mPlistnodeTail->pPre;
-        free(tmp);
-        return item;
     }
+
+    listnode* tmp = mPlistnodeTail;
+    void *item = tmp->item;
+    //tmp->pPre == NULL indicate this is the last item in list;
+    if(tmp->pPre == NULL){
+        mPlistnodeHead = NULL;
+        mPlistnodeTail = NULL;
+    } else {
+        mPlistnodeTail = tmp->pPre;
+        mPlistnodeTail->pNext = NULL;
+    }
+
+    free(tmp);
+    return item;
+
+}
+
+JKList::Iterator *JKList::getIterator() {
+    Iterator * it = new Iterator(mPlistnodeHead);
+    return it;
+}
+
+bool JKList::isEmpty() {
+    return mPlistnodeHead == NULL ? true : false;
+}
+
+JKList::Iterator::Iterator(listnode *current) {
+    mCurrent = current;
+}
+
+void *JKList::Iterator::next() {
+    void * item = NULL;
+    if(NULL == mCurrent){
+        return NULL;
+    } else {
+        item = mCurrent->item;
+        mCurrent = mCurrent->pNext;
+    }
+    return item;
 }

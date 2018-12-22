@@ -80,15 +80,6 @@ void JKThread::start() {
     pthread_attr_init(&attr);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
     JKMutex::Autolock _l(mLock);
-//    android_thread_func_t entryFunction;
-//    thread_data_t* t = new thread_data_t;
-//    t->priority = 0;
-//    t->threadName = mName.c_str() ? strdup(mName.c_str()) : NULL;
-//    t->entryFunction = (android_thread_func_t)_threadLoop;
-//    t->userData = NULL;
-//    entryFunction = (android_thread_func_t)&thread_data_t::trampoline;
-//    userData = t;
-//    pthread_create(&mThread, &attr, (android_pthread_entry)entryFunction, NULL);
     pthread_create(&mThread, &attr, (android_pthread_entry)_threadLoop,(void*)this);
 }
 

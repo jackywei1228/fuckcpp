@@ -1,14 +1,17 @@
+#include <string>
+#include "JKMessageManager.h"
+#ifndef FUCKCPP_JKPASER_H
+#define FUCKCPP_JKPASER_H
+using std::string;
 
-class JKPaser
+class JKPaser : public JKMessageManager::JKMessageListener
 {
 public:
-    JKPaser(std::string name);
-    int addListener();
+    JKPaser(string name);
+    virtual int onRecive(int type,void* args);
 protected:
 private:
+    int printPkg(unsigned char* pContent,unsigned int len);
+    string mName;
 };
-
-class JKPaserListener {
-    public:
-        virtual int onRecive() = 0;
-};
+#endif //FUCKCPP_JKPASER_H
