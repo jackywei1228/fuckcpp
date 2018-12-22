@@ -16,6 +16,7 @@ Java_me_ifonly_fuckcpp_MainActivity_stringFromJNI(
     std::string hello = "Hello from C++,And fuck you!";
     myenv = env;
     JKRoAi* roAi = new JKRoAi();
+    JKMessageManager::GetInstance()->start();
     JKPaser* paser = new JKPaser("debug");
     roAi->login();
     LOGD("%s","fuck U");

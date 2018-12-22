@@ -15,6 +15,7 @@
 
 #include <arpa/inet.h>
 #include "JKMessageManager.h"
+#include "JKTypes.h"
 
 #define MAXDATASIZE 4096
 
@@ -57,7 +58,7 @@ void JKClient::run() {
 
     FD_SET(mSockfd,&master); // s is a socket descriptor
     int maxfd = mSockfd;
-
+    LOGD("mSockfd = %d ,start listen!!!",mSockfd);
     for(;;){
         read_fds = master;
         if (select(maxfd+1, &read_fds, NULL, NULL, NULL) == -1) {
@@ -76,12 +77,14 @@ void JKClient::run() {
                     PackageInfo* pinfo = new PackageInfo();
                     pinfo->len = numbytes;
                     pinfo->pContent = buf;
+                    LOGD("recv packages: length = %d",numbytes);
                     JKMessageManager::GetInstance()->addMessage(JKMessageManager::MSG_RECEIVE_NETWORK_PACK,pinfo);
                 }
             }
         }
     }
     close(mSockfd);
+    LOGD("maybe error!");
     return;
 }
 
@@ -89,16 +92,32 @@ int JKClient::SendBytes(void *buf,int len) {
     return send(mSockfd,buf,len,0);
 }
 
+//int JKClient::connect() {
+//        struct sockaddr_in addr;
+//        bzero(&addr, sizeof(addr));
+//        addr.sin_family = AF_INET;
+//        addr.sin_port = htons(6900);
+//        if((mSockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1){
+//            inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
+//        }
+//        if (::connect(mSockfd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
+//
+//        }
+//};
+
+#if 1
 int JKClient::connect() {
     struct addrinfo hints, *servinfo, *p;
     int rv;
     char s[INET6_ADDRSTRLEN];
     memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_UNSPEC;
+//    hints.ai_family = AF_UNSPEC;
+    hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
 
     if ((rv = getaddrinfo(mIpName.c_str(), mIpPort.c_str(), &hints, &servinfo)) != 0) {
         fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+        LOGD("getaddrinfo: %s\n", gai_strerror(rv));
         return JK_ERROR;
     }
 
@@ -107,11 +126,13 @@ int JKClient::connect() {
         if ((mSockfd = socket(p->ai_family, p->ai_socktype,
                               p->ai_protocol)) == -1) {
             perror("client: socket");
+            LOGD("%s","client: socket 1");
             continue;
         }
 
         if (::connect(mSockfd, p->ai_addr, p->ai_addrlen) == -1) {
             perror("client: connect");
+            LOGD("%s","client: socket 2");
             close(mSockfd);
             continue;
         }
@@ -121,6 +142,7 @@ int JKClient::connect() {
 
     if (p == NULL) {
         fprintf(stderr, "client: failed to connect\n");
+        LOGD("%s","client: failed to connect");
         return JK_ERROR;
     }
 
@@ -130,5 +152,5 @@ int JKClient::connect() {
     freeaddrinfo(servinfo); // all done with this structure
     return JK_OK;
 }
-
+#endif //0
 

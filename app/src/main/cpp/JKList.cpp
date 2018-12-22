@@ -6,22 +6,25 @@
 #include "JKList.h"
 #include "stdio.h"
 #include "stdlib.h"
-
+#include "JKTypes.h"
 
 
 
 JKList::JKList() {
-
+    mPlistnodeHead = NULL;
+    mPlistnodeTail = NULL;
 }
 
 int JKList::push(void *item) {
     if(mPlistnodeHead == NULL){
+        LOGD("%s","mPlistnodeHead == NULL");
         mPlistnodeHead = new listnode();
         mPlistnodeHead->pNext = NULL;
         mPlistnodeHead->pPre = NULL;
         mPlistnodeHead->item = item;
         mPlistnodeTail = mPlistnodeHead;
     } else {
+        LOGD("%s","there is something in list");
         mPlistnodeTail->pNext = new listnode();
         mPlistnodeTail->pNext->pPre = mPlistnodeTail;
         //new tail
