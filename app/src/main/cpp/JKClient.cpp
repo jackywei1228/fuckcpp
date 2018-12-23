@@ -74,6 +74,9 @@ void JKClient::run() {
                         perror("recv");
                         break;
                     }
+                    if(numbytes == 0){
+                        break;
+                    }
                     PackageInfo* pinfo = new PackageInfo();
                     pinfo->len = numbytes;
                     pinfo->pContent = buf;
