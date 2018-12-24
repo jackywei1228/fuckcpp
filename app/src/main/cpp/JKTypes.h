@@ -15,5 +15,13 @@
 
 //typedef unsigned char* JKByte;
 
+typedef unsigned char jk_uint8;
+typedef char jk_int8;
+
+typedef unsigned short jk_uint16;
+typedef short jk_int16;
+typedef unsigned int jk_uint32;
+typedef int jk_int32;
+
 
 #endif //FUCKCPP_JKTYPES_H
