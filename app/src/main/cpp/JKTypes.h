@@ -8,7 +8,7 @@
 #include <android/log.h>
 
 #define JK_OK 0
-#define JK_ERROR 1
+#define JK_ERROR -1
 
 #define TAG    "JKRO"
 #define LOGD(...)  __android_log_print(ANDROID_LOG_ERROR,TAG,__VA_ARGS__)
