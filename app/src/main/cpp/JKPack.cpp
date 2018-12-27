@@ -31,7 +31,7 @@ int JKPack::readint16(jk_int16* parg) {
     if(!isEnoughDataToRead(sizeof(jk_int16))){
         return JK_ERROR_NO_SPACE;
     }
-    *parg = *(jk_uint16*)pCurrPoint;
+    *parg = *(jk_int16*)pCurrPoint;
     pCurrPoint += sizeof(jk_int16);
     return JK_OK;
 }
@@ -40,6 +40,7 @@ int JKPack::readUint16(jk_uint16* parg) {
     if(!isEnoughDataToRead(sizeof(jk_uint16))){
         return JK_ERROR_NO_SPACE;
     }
+//    LOGD("%02X %02X",*(char*)pCurrPoint,*(char*)(pCurrPoint+1));
     *parg = *(jk_uint16*)pCurrPoint;
     pCurrPoint += sizeof(jk_uint16);
     return JK_OK;
@@ -234,6 +235,7 @@ JKPack::JKPack(char *buf, jk_uint32 length) {
         *pData = 0xFFFFFF;
     }
     memset(pData,0x00,mLength);
+    memcpy(pData,buf,length);
     pCurrPoint = pData;
 }
 

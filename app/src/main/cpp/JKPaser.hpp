@@ -11,7 +11,7 @@ public:
     virtual int onRecive(int type,void* args);
 protected:
 private:
-    int printPkg(unsigned char* pContent,unsigned int len);
+    int printPkg(char* pContent,unsigned int len);
     string mName;
 };
 #endif //FUCKCPP_JKPASER_H

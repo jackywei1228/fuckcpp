@@ -23,7 +23,7 @@ class JKClient : public JKThread
     int getStatus();
     struct PackageInfo {
         unsigned int len;
-        unsigned char* pContent;
+        char* pContent;
     };
   protected:
   private:

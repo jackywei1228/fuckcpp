@@ -80,7 +80,7 @@ void JKClient::run() {
         for(int i = 0; i <= maxfd; i++) {
             if (FD_ISSET(i, &read_fds)) { // we got information
                 if (i == mSockfd) {
-                    unsigned char* buf = (unsigned char*)malloc(MAX_PACKAGE_LEN);
+                    char* buf = (char*)malloc(MAX_PACKAGE_LEN);
                     memset(buf,0x00,MAX_PACKAGE_LEN);
                     if ((numbytes = recv(mSockfd, buf, MAX_PACKAGE_LEN-1, 0)) == -1) {
                         perror("recv");

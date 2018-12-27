@@ -1,6 +1,7 @@
 #include "JKPaser.hpp"
 #include "JKClient.hpp"
 #include "JKTypes.h"
+#include "JKRecvPack.h"
 
 
 JKPaser::JKPaser(string name) : mName(name) {
@@ -11,11 +12,18 @@ int JKPaser::onRecive(int type, void *args) {
     if(type == JKMessageManager::MSG_RECEIVE_NETWORK_PACK){
         JKClient::PackageInfo* pPkg = (JKClient::PackageInfo*)args;
         printPkg(pPkg->pContent,pPkg->len);
+        JKRecvPack* pJKRecvPack = new JKRecvPack(pPkg->pContent,pPkg->len);
+        jk_uint16 temp = 0;
+        if(pJKRecvPack->readUint16(&temp) == JK_OK){
+            LOGD("The JKRecvPack head is : %04X",(jk_uint16)temp);
+        } else {
+            LOGD("The JKRecvPack readUint16 read error");
+        }
     }
     return 0;
 }
 #define LOG_BUF_LEN 256
-int JKPaser::printPkg(unsigned char *pContent, unsigned int len) {
+int JKPaser::printPkg(char *pContent, unsigned int len) {
     int rowNum = 16;
     int row = len / rowNum;
     int lastRowContent = len % 16;
