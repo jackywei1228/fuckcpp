@@ -22,15 +22,15 @@
 extern JNIEnv *myenv;
 #define MAX_PACKAGE_LEN 1024
 
-JKClient::JKClient(std::string ipName): mIpName(ipName) {
+JKClient::JKClient(std::string ipName): mIpName(ipName),mIpPort("6900"),mStatus(UNCONNECTED),mSockfd(-1) {
 
 }
 
-JKClient::JKClient(char* ipName): mIpName(ipName), mIpPort("6900"){
+JKClient::JKClient(char* ipName): mIpName(ipName), mIpPort("6900"),mStatus(UNCONNECTED),mSockfd(-1){
 
 }
 
-JKClient::JKClient(char* ipName,char* port): mIpName(ipName),mIpPort(port) {
+JKClient::JKClient(char* ipName,char* port): mIpName(ipName),mIpPort(port),mStatus(UNCONNECTED),mSockfd(-1) {
 
 }
 
@@ -48,21 +48,33 @@ int JKClient::listen() {
     return 0;
 }
 
+
+
+
 void JKClient::run() {
     int numbytes;
     fd_set master;
     fd_set read_fds;
 
+    if(mSockfd == -1){
+        return;
+    }
+    int maxfd = mSockfd;
     FD_ZERO(&master);
     FD_ZERO(&read_fds);
-
     FD_SET(mSockfd,&master); // s is a socket descriptor
-    int maxfd = mSockfd;
     LOGD("mSockfd = %d ,start listen!!!",mSockfd);
+    mStatus = LISTENING;
     for(;;){
+        if(mStatus == EXITING){
+            break;
+        }
         read_fds = master;
         if (select(maxfd+1, &read_fds, NULL, NULL, NULL) == -1) {
             perror("select");
+            break;
+        }
+        if(mStatus == EXITING || mSockfd == -1){
             break;
         }
         for(int i = 0; i <= maxfd; i++) {
@@ -87,6 +99,7 @@ void JKClient::run() {
         }
     }
     close(mSockfd);
+    mStatus = UNCONNECTED;
     LOGD("maybe error!");
     return;
 }
@@ -95,27 +108,14 @@ int JKClient::SendBytes(void *buf,int len) {
     return send(mSockfd,buf,len,0);
 }
 
-//int JKClient::connect() {
-//        struct sockaddr_in addr;
-//        bzero(&addr, sizeof(addr));
-//        addr.sin_family = AF_INET;
-//        addr.sin_port = htons(6900);
-//        if((mSockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1){
-//            inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
-//        }
-//        if (::connect(mSockfd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
-//
-//        }
-//};
 
-#if 1
 int JKClient::connect() {
     struct addrinfo hints, *servinfo, *p;
     int rv;
     char s[INET6_ADDRSTRLEN];
     memset(&hints, 0, sizeof hints);
-//    hints.ai_family = AF_UNSPEC;
-    hints.ai_family = AF_INET;
+    hints.ai_family = AF_UNSPEC;
+//    hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
 
     if ((rv = getaddrinfo(mIpName.c_str(), mIpPort.c_str(), &hints, &servinfo)) != 0) {
@@ -153,7 +153,19 @@ int JKClient::connect() {
               s, sizeof s);
     printf("client: connecting to %s\n", s);
     freeaddrinfo(servinfo); // all done with this structure
+    mStatus = CONNECTED;
     return JK_OK;
 }
-#endif //0
+
+int JKClient::disconnect() {
+    mStatus = EXITING;
+    close(mSockfd);
+    mSockfd= -1;
+    return 0;
+}
+
+int JKClient::getStatus() {
+    return mStatus;
+}
+
 

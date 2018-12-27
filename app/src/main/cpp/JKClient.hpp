@@ -4,18 +4,23 @@
 class JKClient : public JKThread
 {
   public:
+    static const int UNCONNECTED = 0;
+    static const int CONNECTED = 1;
+    static const int LISTENING = 2;
+    static const int EXITING = 3;
+
     JKClient(std::string ipName);
 
     JKClient(char *ipName);
 
     JKClient(char *ipName, char *port);
 
-    int SetPaser(JKPaser paser);
     int SendBytes(void *buf,int len);
-    int SendCommand();
     virtual void run();
     int connect();
     int listen();
+    int disconnect();
+    int getStatus();
     struct PackageInfo {
         unsigned int len;
         unsigned char* pContent;
@@ -25,4 +30,5 @@ class JKClient : public JKThread
     std::string mIpName;
     std::string mIpPort;
     int mSockfd;
+    int mStatus;
 };
