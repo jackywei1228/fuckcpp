@@ -9,10 +9,12 @@
 
 class JKPack {
 public:
+    JKPack();
     JKPack(char* buf,jk_uint32 length);
     JKPack(JKPack& jkpack);
     int resetWorkPoint();
     int getLength();
+    char* getBuffer();
 
     int readInt32(jk_int32* parg);
     int readUint32(jk_uint32* parg);

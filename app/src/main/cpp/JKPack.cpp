@@ -230,6 +230,9 @@ JKPack::JKPack(char *buf, jk_uint32 length) {
         mLength = length * 2;
         pData = (char*)malloc(mLength);
     }
+    if(pData == NULL){
+        *pData = 0xFFFFFF;
+    }
     memset(pData,0x00,mLength);
     pCurrPoint = pData;
 }
@@ -257,6 +260,20 @@ int JKPack::resetWorkPoint() {
 
 int JKPack::getLength() {
     return mLength;
+}
+
+JKPack::JKPack() {
+    mLength = DEFAULT_LENGHT;
+    pData = (char*)malloc(mLength);
+    if(pData == NULL){
+        *pData = 0xFFFFFF;
+    }
+    memset(pData,0x00,mLength);
+    pCurrPoint = pData;
+}
+
+char *JKPack::getBuffer() {
+    return pData;
 }
 
 
