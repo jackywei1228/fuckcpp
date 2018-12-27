@@ -31,7 +31,7 @@ void JKRoAi::login() {
         client->SendBytes(bytes,55);
 #endif //0
         JKPack* jkPack = new JKPack();
-        jkPack->writeUint16(0x64);
+        jkPack->writeUint16((jk_uint16)0x64);
         jkPack->writeUint32(4);
         jkPack->writeChar("test",24);
         jkPack->writeChar("123456",24);
