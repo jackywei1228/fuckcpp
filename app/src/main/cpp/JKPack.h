@@ -15,6 +15,7 @@ public:
     int resetWorkPoint();
     int getLength();
     char* getBuffer();
+    int getUsedLength();
 
     int readInt32(jk_int32* parg);
     int readUint32(jk_uint32* parg);

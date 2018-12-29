@@ -36,7 +36,8 @@ void JKRoAi::login() {
         jkPack->writeChar("test",24);
         jkPack->writeChar("123456",24);
         jkPack->writeUint8(35);
-        client->SendBytes(jkPack->getBuffer(),55);
+        LOGD("jkPack->getUsedLength() = %d",jkPack->getUsedLength());
+        client->SendBytes(jkPack->getBuffer(),jkPack->getUsedLength());
     } else {
         LOGD("connect error!!!!");
     }

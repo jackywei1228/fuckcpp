@@ -278,5 +278,9 @@ char *JKPack::getBuffer() {
     return pData;
 }
 
+int JKPack::getUsedLength() {
+    return pCurrPoint-pData;
+}
+
 
 
